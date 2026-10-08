@@ -11,15 +11,15 @@ root.setLevel(logging.INFO)
 #####
 # Stores the JSON-LD annotations to a file named according to the document title
 #####
-def store_annotations_json(document_title, annotations):
-  with open(f'{cfg.DOWNLOAD_ANNOTATIONS_TO}/{document_title}.json', 'w') as outfile:
+def store_annotations_json(filename_stem, annotations):
+  with open(f'{cfg.DOWNLOAD_ANNOTATIONS_TO}/{filename_stem}.json', 'w') as outfile:
     json.dump(annotations, outfile, indent=2)
 
 #####
 # Stores the CSV annotations to a file named according to the document title
 #####
-def store_annotations_csv(document_title, annotations):
-  with open(f'{cfg.DOWNLOAD_ANNOTATIONS_TO}/{document_title}.csv', 'w') as outfile:
+def store_annotations_csv(filename_stem, annotations):
+  with open(f'{cfg.DOWNLOAD_ANNOTATIONS_TO}/{filename_stem}.csv', 'w') as outfile:
     outfile.write(annotations)
 
 ###############################
@@ -39,15 +39,16 @@ try:
 
   for item in items:
     doc_id = item['id']
-    logging.info(f'Downloading data for {item["title"]}')
+    logging.info(f'Downloading data for {item["title"]} ({item["id"]})')
 
     annotations_json = client.get_annotations(doc_id)
     annotations_csv = client.get_annotations(doc_id, 'csv')
 
     logging.info(f'  Document has {len(annotations_json)} annotations')
 
-    store_annotations_json(item['title'], annotations_json)
-    store_annotations_csv(item['title'], annotations_csv)
+    filename_stem = cfg.FILENAME_TEMPLATE.format_map(item)
+    store_annotations_json(filename_stem, annotations_json)
+    store_annotations_csv(filename_stem, annotations_csv)
 
     time.sleep(0.2)
 

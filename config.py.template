@@ -19,3 +19,7 @@ DOWNLOAD_FOLDER = False # 'f65b8f0f-d510-42b2-945f-d28f92743c14'
 # Destination folder (on your machine) where downloaded annotation 
 # should be stored
 DOWNLOAD_ANNOTATIONS_TO = './downloads'
+
+# Template for file names. Default is to use the document's title,
+# which is not guaranteed to be unique. Use `id` for unique names.
+FILENAME_TEMPLATE = '{title}'
